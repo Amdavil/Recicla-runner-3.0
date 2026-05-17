@@ -330,16 +330,10 @@ function initScenery(lvl) {
 
 function initRoadLines() {
   roadLines = [];
-  const count = 14;
+  const count = 10;
+  const gap   = canvas.height / count;
   for (let i = 0; i < count; i++) {
-    // Mild perspective: lines toward bottom are slightly wider and taller
-    const t = i / count;
-    roadLines.push({
-      y: i * (canvas.height / count),
-      x: canvas.width / 2,
-      w: 4 + t * 3,
-      h: 28 + t * 14,
-    });
+    roadLines.push({ y: i * gap, x: canvas.width / 2 });
   }
 }
 
@@ -430,12 +424,13 @@ function drawScenery() {
     ctx.fillRect(canvas.width - 60, 0, 60, canvas.height);
   }
 
-  // Road lines — mild perspective: far (top) = thin/short, near (bottom) = wide/tall
+  // Líneas de carretera — tamaño y espaciado uniforme
+  const LW = 5, LH = 32, GAP = canvas.height / 10;
   ctx.fillStyle = '#FFD700';
   roadLines.forEach(line => {
     line.y += gameSpeed;
-    if (line.y > canvas.height) line.y = -line.h;
-    ctx.fillRect(line.x - line.w / 2, line.y, line.w, line.h);
+    if (line.y > canvas.height) line.y -= canvas.height + LH;
+    ctx.fillRect(line.x - LW / 2, line.y, LW, LH);
   });
 
   // Parallax scenery — far elements move slower
